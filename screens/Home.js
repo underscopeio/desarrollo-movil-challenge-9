@@ -8,6 +8,8 @@ import ArtistaFavorito from '../ArtistaFavorito'
 import { connect } from 'react-redux'
 import { SET_AS_FAVORITE_TYPE, ADD_ARTISTS_TYPE } from '../reducers/artists'
 
+import { setArtistAsFavoriteOnFirebase } from '../firebase'
+
 class HomeScreen extends React.Component {
   state = {
     result: null,
@@ -27,7 +29,9 @@ class HomeScreen extends React.Component {
   }
 
   handleFavoriteButtonPress = artist => {
+    setArtistAsFavoriteOnFirebase(artist.nombre, !this.props.favoritos[artist.nombre] )
     this.props.setArtistAsFavorite(artist.nombre)
+    
   }
 
   render() {

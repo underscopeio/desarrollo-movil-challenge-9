@@ -1,7 +1,7 @@
 import { AuthSession } from 'expo'
 import { deleteItemAsync } from 'expo/src/SecureStore'
 
-const SPOTIFY_CLIENT_ID = 'bb223824c29844c7999ac5bc0ab7fdff'
+const SPOTIFY_CLIENT_ID = '1eec4b18983b40609a803fe6895ac7a6'
 const SECURE_STORE_ACCESS_TOKEN_KEY = 'spotifyAccessToken'
 
 let token
