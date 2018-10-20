@@ -19,10 +19,30 @@ Para poder resolver este challenge seguir los siguientes pasos
 1. Agregar la nueva `redirectUrl` en la configuración de Spotify 
 > Debería ser `https://auth.expo.io/@<TU_USERNAME>/desarrollo-movil-challenge-9`, pero podés verificarlo haciendo un `console.warn('Mi url', redirectUrl)` debajo de la llamada a `AuthSession.getRedirectUrl()` en el archivo `spotify-api-client.js`
 
+#### Creando un proyecto en Firebase
+1. Registarse en Firebase
+1. Ir a la **consola** y crear un nuevo proyecto (elegir nombre, id y los permisos para darle a Google)
+1. Seleccionar la opción **web** para integrar. Eso debería mostrar un snippet de código que vamos a usar más adelante.
+
 #### Integrando Firebase
 1. Instalar el SDK de Firebase como dependencia
     > `yarn add firebase` o `npm install firebase`
-1. Crear un archivo llamado `firebase.js` y dentro del mismo copiar el snippet que nos da Firebase con la inicialización del mismo
+1. Crear un archivo llamado `firebase.js` y dentro del mismo copiar el snippet que nos da Firebase con la inicialización del mismo, con una diferencia: debemos importar `firebase` como dependencia.
+Debería quedarte algo así
+```js
+import firebase from 'firebase'
+
+const config = {
+  apiKey: '...',
+  authDomain: '...',
+  databaseURL: '...',
+  projectId: '...',
+  storageBucket: '...',
+  messagingSenderId: '...',
+}
+
+firebase.initializeApp(config)
+```
 
 #### Integrando Firestore
 1. Integrar **Firestore** importandolo `import 'firebase/firestore'` en nuestro archivo `firebase.js`
