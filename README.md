@@ -45,6 +45,14 @@ firebase.initializeApp(config)
 ```
 
 #### Integrando Firestore
+Antes de integrar Firestore necesitamos crear una _instancia_ del servicio desde el sitio de Firebase.
+
+1. Ir a la sección **Database** en la **consola** de Firebase
+1. Crear una base de datos usando **Firestore** (no la **Realtime Database**)
+1. Elegir modo **test** (o **pruebas**) para poder escribir y leer sin estar autenticado
+
+Una vez dado de alta el servicio, integrar Firestore en nuestra aplicación
+
 1. Integrar **Firestore** importandolo `import 'firebase/firestore'` en nuestro archivo `firebase.js`
 1. Seguir el **Get Started** desde el paso **Initialize Cloud Firestore** (https://firebase.google.com/docs/firestore/quickstart?authuser=0)
 1. Probar de insertar data y corroborar que haya funcionado en el dashboard
