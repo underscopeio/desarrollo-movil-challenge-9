@@ -2,14 +2,36 @@ import React from 'react'
 import { Button, StyleSheet, Text, View, ScrollView } from 'react-native'
 import { authorize, logout, getUserArtistsPromise } from '../spotify-api-client'
 import ArtistaFavorito from '../ArtistaFavorito'
+import { find, keys } from 'lodash'
 
 import { connect } from 'react-redux'
 
+import { db } from '../firebase'
+import ArtistaConFans from '../ArtistaConFans'
+
 class FavoritesScreen extends React.Component {
+  state = {
+    favoritos: [],
+  }
+
+  componentDidMount() {
+    db.collection('favoritos').onSnapshot(querySnapshot => {
+      const favoritos = []
+      querySnapshot.forEach(doc => {
+        const artistFromSpotify = find(this.props.artistas, artista => artista.nombre === doc.id)
+
+        favoritos.push({
+          ...artistFromSpotify,
+          fans: keys(doc.data()),
+        })
+      })
+      this.setState({ favoritos })
+    })
+  }
+
   render() {
     const { artistas } = this.props
-    const artistasFavoritos = []
-    //TODO: mostrar artistas que estén marcados como favoritos en Firebase
+    const { favoritos } = this.state
 
     return (
       <View style={styles.container}>
@@ -18,10 +40,8 @@ class FavoritesScreen extends React.Component {
           style={styles.scrollView}
           contentContainerStyle={styles.scrollViewContent}
         >
-          {artistasFavoritos &&
-            artistasFavoritos.map(artist => (
-              <ArtistaFavorito artista={artist} key={artist.nombre} esFavorito={this.props.favoritos[artist.nombre]} />
-            ))}
+          {favoritos &&
+            favoritos.map(artist => <ArtistaConFans artista={artist} key={artist.nombre} fans={artist.fans} />)}
         </ScrollView>
       </View>
     )

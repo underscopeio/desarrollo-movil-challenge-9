@@ -13,6 +13,8 @@ import { Provider } from 'react-redux'
 
 import rootReducer from './reducers'
 
+import firebase, { db } from './firebase'
+
 // const AppStack = createStackNavigator({ Home: HomeScreen })
 
 const AppStack = createBottomTabNavigator(

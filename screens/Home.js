@@ -8,15 +8,24 @@ import ArtistaFavorito from '../ArtistaFavorito'
 import { connect } from 'react-redux'
 import { SET_AS_FAVORITE_TYPE, ADD_ARTISTS_TYPE } from '../reducers/artists'
 
+import { setArtistAsFavorite, favoritesCollection } from './../firebase/artists'
+import { db, auth, getCurrentUser } from '../firebase'
+
 class HomeScreen extends React.Component {
   state = {
     result: null,
+    favoritos: {},
   }
 
   componentDidMount() {
-    getUserArtistsPromise().then(artistas => {
-      this.props.loadArtists(artistas)
-      // this.setState({ artistas })
+    getUserArtistsPromise().then(artistas => this.props.loadArtists(artistas))
+    getCurrentUser().then(currentUser => this.setState({ currentUser }))
+    favoritesCollection.onSnapshot(querySnapshot => {
+      const favoritos = {}
+      querySnapshot.forEach(function(doc) {
+        favoritos[doc.id] = doc.data()
+      })
+      this.setState({ favoritos })
     })
   }
 
@@ -27,12 +36,18 @@ class HomeScreen extends React.Component {
   }
 
   handleFavoriteButtonPress = artist => {
-    this.props.setArtistAsFavorite(artist.nombre)
+    const { favoritos, currentUser } = this.state
+
+    const artistaFavorito = favoritos[artist.nombre]
+    const eraFavorito = currentUser && artistaFavorito && artistaFavorito[currentUser.uid]
+
+    setArtistAsFavorite(artist.nombre, !eraFavorito)
   }
 
   render() {
     const { artistas } = this.props
-    const { loggedIn } = this.state
+    const { loggedIn, favoritos, currentUser } = this.state
+    const userId = currentUser ? currentUser.uid : null
 
     return (
       <View style={styles.container}>
@@ -46,7 +61,7 @@ class HomeScreen extends React.Component {
               <ArtistaFavorito
                 artista={artist}
                 key={artist.nombre}
-                esFavorito={this.props.favoritos[artist.nombre]}
+                esFavorito={favoritos[artist.nombre] && favoritos[artist.nombre][userId]}
                 onFavoriteButtonPress={() => this.handleFavoriteButtonPress(artist)}
               />
             ))}
@@ -90,14 +105,15 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    favoritos: state.artists.favoritos,
     artistas: state.artists.artistas,
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    setArtistAsFavorite: id => dispatch({ type: SET_AS_FAVORITE_TYPE, payload: { id } }),
+    // NOTA: ya no usamos más el `setArtistAsFavorite` que hace `dispatch` a Redux
+    //    Ahora seteamos directamente en Firebase los favoritos
+    // setArtistAsFavorite: id => dispatch({ type: SET_AS_FAVORITE_TYPE, payload: { id } }),
     loadArtists: artistas => dispatch({ type: ADD_ARTISTS_TYPE, payload: { artistas } }),
   }
 }
