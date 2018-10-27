@@ -60,12 +60,3 @@ Una vez dado de alta el servicio, integrar Firestore en nuestra aplicación
 #### Peristiendo datos en Firestore
 1. Definir una estructura de cómo guardar los artistas favoritos
 1. Una vez definida esa estructura, persistir los favoritos al tocar el botón de _favorito_
-
-#### Identificando los fans
-Para poder identificar cuáles son los fans de cada artista, tendremos que agregar autenticación con Firebase.
-Vamos a integrar Facebook, para el que Expo provee un buen componente.
-
-1. Seguir la guía de Expo de cómo integrar Facebook login
-> (https://docs.expo.io/versions/latest/sdk/facebook)
-1. TBD
-
